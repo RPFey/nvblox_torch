@@ -29,11 +29,18 @@ ADD_DEFINITIONS(-DPRE_CXX11_ABI_LINKABLE)
 
 SET(nvblox_link_options "-Wl,--disable-new-dtags")
 
+find_package(CUDA REQUIRED)
+find_package(CUDAToolkit REQUIRED)
 find_package(Torch REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
+set(GLOG_BASE_PATH "" CACHE STRING "Base path to static output for glog, build with -fPIC.")
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(glog REQUIRED libglog)
+link_directories(
+    ${GLOG_BASE_PATH}/lib
+)
 # Download thirdparty deps
 #message(STATUS "Downloading 3rdparty dependencies")
 #message(STATUS "Downloading Eigen")
@@ -41,10 +48,6 @@ include(thirdparty/eigen/eigen.cmake)
 #find_package(Glog REQUIRED)
 
 #find_package(Eigen3 REQUIRED) # we need to import eigen from nvblox?
-
-
-find_package(CUDA REQUIRED)
-
 find_package(nvblox REQUIRED)
 
 
